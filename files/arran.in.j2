@@ -1,0 +1,11 @@
+server {
+        listen 443 ssl;
+        server_name {{server_name}};
+        
+        ssl_certificate {{cert_path}}/{{certificate}};
+        ssl_certificate_key {{cert_path}}/{{certificate_key}};
+
+        root {{web_root}};
+
+        index index.html index.htm;
+}

@@ -1,0 +1,52 @@
+- name: Install Nginx with Let's Encrypt certificate
+  hosts: ubuntu1.vbox.local
+  remote_user: arran
+  become: true
+  vars:
+    files: files/
+    server_name: arran.in
+    cert_path: "/etc/letsencrypt/live/{{ server_name }}"
+    certificate: fullchain.pem
+    certificate_key: privkey.pem
+    web_root: /var/www/html
+
+  tasks:
+  - name: Install Nginx
+    apt:
+      name: nginx-core
+      state: present
+
+  - name: Copy Let's Encrypt Certificates
+    unarchive:
+      src: "{{ files }}/letsencrypt.tar"
+      dest: /etc
+
+  - name: Generate Nginx config
+
+    template:
+      src: "{{ files }}/arran.in.j2"
+      dest: /etc/nginx/sites-available/arran.in
+      owner: root
+      group: root
+      mode: '0644'
+
+  - name: Symlink Nginx config
+    file:
+      src: "/etc/nginx/sites-available/{{ server_name }}"
+      dest: "/etc/nginx/sites-enabled/{{ server_name }}"
+      state: link
+
+  - name: Unlink Nginx default site
+    file:
+      path: "/etc/nginx/sites-enabled/default"
+      state: absent
+
+  - name: Copy index.html
+    copy:
+      src: "{{ files }}/index.html"
+      dest: "{{ web_root }}/index.html"
+
+  - name: Reload Nginx
+    systemd:
+      name: nginx.service
+      state: reloaded
