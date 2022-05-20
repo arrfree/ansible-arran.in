@@ -1,5 +1,5 @@
 - name: Install Nginx with Let's Encrypt certificate
-  hosts: ubuntu1.vbox.local
+  hosts: aws1.arran.in
   remote_user: arran
   become: true
   vars:
