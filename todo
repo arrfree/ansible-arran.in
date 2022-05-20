@@ -2,3 +2,4 @@
 - change hostname to aws1.arran.in
 - pull certs from secure repo
 - pull html files from github repo
+- grab cron job script for let's encrypt autorenewal
