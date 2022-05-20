@@ -22,7 +22,6 @@
       dest: /etc
 
   - name: Generate Nginx config
-
     template:
       src: "{{ files }}/arran.in.j2"
       dest: /etc/nginx/sites-available/arran.in
