@@ -34,18 +34,23 @@
       src: "/etc/nginx/sites-available/{{ server_name }}"
       dest: "/etc/nginx/sites-enabled/{{ server_name }}"
       state: link
+    notify:
+      - Reload Nginx
 
   - name: Unlink Nginx default site
     file:
       path: "/etc/nginx/sites-enabled/default"
       state: absent
+    notify:
+      - Reload Nginx
 
   - name: Copy index.html
     copy:
       src: "{{ files }}/index.html"
       dest: "{{ web_root }}/index.html"
 
-  - name: Reload Nginx
-    systemd:
-      name: nginx.service
-      state: reloaded
+  handlers:
+    - name: Reload Nginx
+      systemd:
+        name: nginx.service
+        state: reloaded
