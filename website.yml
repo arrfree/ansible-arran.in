@@ -28,6 +28,8 @@
       owner: root
       group: root
       mode: '0644'
+    notify:
+      - Reload Nginx
 
   - name: Symlink Nginx config
     file:
@@ -48,6 +50,14 @@
     copy:
       src: "{{ files }}/index.html"
       dest: "{{ web_root }}/index.html"
+
+  - name: Create files directory in web_root
+    file:
+      path: "{{ web_root }}/files"
+      state: directory
+      owner: www-data
+      group: arran
+      mode: '0770' 
 
   handlers:
     - name: Reload Nginx

@@ -8,4 +8,8 @@ server {
         root {{web_root}};
 
         index index.html index.htm;
+
+        location /files/ {
+                autoindex on;
+        }
 }
